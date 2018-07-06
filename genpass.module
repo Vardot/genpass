@@ -1,6 +1,7 @@
 <?php
 
 use Drupal\Core\Form\ConfigFormBase;
+use Drupal\Component\Utility\Crypt;
 
 define('GENPASS_REQUIRED', 0);
 define('GENPASS_OPTIONAL', 1);
