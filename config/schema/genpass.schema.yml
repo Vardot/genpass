@@ -1,5 +1,5 @@
 genpass.settings:
-  type: mapping
+  type: config_object
   label: Impostazioni
   mapping:
     genpass_length:
