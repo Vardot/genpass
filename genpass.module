@@ -259,7 +259,8 @@ function genpass_register_validate($form, FormStateInterface &$form_state) {
     }
 
     if (!empty($message)) {
-      drupal_set_message($message);
+      $messenger = \Drupal::messenger();
+      $messenger->addMessage($message, 'status');
     }
   }
   return $form;
