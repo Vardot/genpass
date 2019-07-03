@@ -16,7 +16,7 @@ define('GENPASS_DISPLAY_BOTH', 3);
  * Implements of hook_init().
  */
 function genpass_page_attachments(array &$attachments) {
-    $attachments['#attached']['library'][] = 'genpass/genpass.libraries.yml';
+  $attachments['#attached']['library'][] = 'genpass/genpass';
 }
 
 /**
