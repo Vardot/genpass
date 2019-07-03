@@ -244,32 +244,36 @@ function genpass_register_validate($form, FormStateInterface &$form_state) {
 
     $display = Drupal::config('genpass.settings')->get('genpass_display');
 
+    // Keep messages as original objects to pass HTML through messenger.
+    $messages = [];
+
     // Administrator created the user.
     $current_path = \Drupal::service('path.current')->getPath();
-    if ($current_path == 'admin/people/create') {
-      $message = t('Since you did not provide a password, it was generated automatically for this account.');
+    if ($current_path == '/admin/people/create') {
+      $messages[] = t('Since you did not provide a password, it was generated automatically for this account.');
       if (in_array($display, [GENPASS_DISPLAY_ADMIN, GENPASS_DISPLAY_BOTH])) {
-        $message .= ' ' . t('The password is: <strong class="genpass-password">@password</strong>', ['@password' => $pass]);
+        $messages[] = t('The password is: <strong class="genpass-password">@password</strong>', ['@password' => $pass]);
       }
     }
     // Optional - User did not provide password, so it was generated.
     elseif ($form_state->getValue('genpass_mode') == GENPASS_OPTIONAL) {
-      $message = t('Since you did not provide a password, it was generated for you.');
+      $messages[] = t('Since you did not provide a password, it was generated for you.');
       if (in_array($display, [GENPASS_DISPLAY_USER, GENPASS_DISPLAY_BOTH])) {
-        $message .= ' ' . t('Your password is: <strong class="genpass-password">@password</strong>', ['@password' => $pass]);
+        $messages[] = t('Your password is: <strong class="genpass-password">@password</strong>', ['@password' => $pass]);
       }
     }
     // Restricted - User was forced to receive a generated password.
     elseif ($form_state->getValue('genpass_mode') == GENPASS_RESTRICTED && in_array($display, [GENPASS_DISPLAY_USER, GENPASS_DISPLAY_BOTH])) {
-      $message = t('The following password was generated for you: <strong class="genpass-password">@password</strong>', ['@password' => $pass]);
+      $messages[] = t('The following password was generated for you: <strong class="genpass-password">@password</strong>', ['@password' => $pass]);
     }
 
-    if (!empty($message)) {
+    if (!empty($messages)) {
       $messenger = \Drupal::messenger();
-      $messenger->addMessage($message, 'status');
+      foreach ($messages as $message) {
+        $messenger->addStatus($message);
+      }
     }
   }
-  return $form;
 }
 
 /**
