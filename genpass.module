@@ -229,7 +229,13 @@ function genpass_user_admin_settings_validate($form, FormStateInterface &$form_s
  * User registration validation.
  */
 function genpass_register_validate($form, FormStateInterface &$form_state) {
-  if (empty($form_state->getValue('pass') && !$form_state->getErrors())) {
+  // Only validate on final submission, and when there are no errors.
+  if ($form_state->getErrors() || !$form_state->isSubmitted()) {
+    return;
+  }
+
+  // Generate password when one hasn't been provided.
+  if (empty($form_state->getValue('pass'))) {
 
     // Generate and set password.
     $pass = genpass_generate();
