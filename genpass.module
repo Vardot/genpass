@@ -50,7 +50,7 @@ function genpass_generate() {
  *   simplistic way & check.
  *
  * @see genpass_form_alter()
- * @see user_password()
+ * @see \Drupal\Core\Password\DefaultPasswordGenerator::generate()
  */
 function genpass_password($length = 16) {
 
